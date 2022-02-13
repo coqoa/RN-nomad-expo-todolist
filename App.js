@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput} from 'react-native';
 import {theme} from './color.js'
 
 export default function App() {
@@ -17,9 +17,7 @@ const addToDo = () =>{
     return
   }
   // save to do
-  const newToDos = Object.assign({}, toDos, {
-    [Date.now()]: {text, work: working}
-  });
+  const newToDos = {...toDos, [Date.now()]: {text, work: working}}
   setToDos(newToDos)
   setText("")
 }
@@ -44,7 +42,6 @@ console.log(toDos)
           </Text>
         </TouchableOpacity>
       </View>
-      {/* <View> */}
         <TextInput 
         autoCorrect = {false}
         returnKeyType='done'
@@ -53,7 +50,13 @@ console.log(toDos)
         onChangeText = {onChangeText} 
         placeholder = {working? "Add To Do" : "Where do you want to go?"}  
         style = {styles.input} />
-      {/* </View> */}
+        <ScrollView>
+          {Object.keys(toDos).map((key) => (
+            <View style={styles.toDo} key={key}>
+              <Text style={styles.toDoText}>{toDos[key].text}</Text>
+            </View>
+          ))}
+        </ScrollView>
     </View>
   );
 }
@@ -78,11 +81,27 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor:"white",
-    paddingVertical:10,
-    paddingHorizontal: 10,
-    marginHorizontal: 10,
-    marginTop:20,
+    paddingVertical:15,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    marginVertical:20,
     fontSize: 18,
-    borderRadius: 20
   },
+  toDo:{
+    backgroundColor:theme.toDoBg,
+    marginBottom: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+  },
+  toDoText:{
+    color: "white",
+    fontSize:15,
+    fontWeight: "500",
+  },
+
+
+  // toDo:{
+  //   color: "white"
+  // },
 });
